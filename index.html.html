@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Blood Donation — Save Lives</title>
+  <style>
+    :root{--accent:#c62828;--bg:#fafafa;--card:#fff}
+    body{font-family:Inter, system-ui, -apple-system, sans-serif;background:var(--bg);margin:0;color:#111}
+    header{background:linear-gradient(90deg,#f8d7da, #fff);padding:28px 16px;text-align:center;border-bottom:4px solid rgba(0,0,0,0.03)}
+    h1{margin:0;font-size:1.6rem;color:var(--accent)}
+    .container{max-width:980px;margin:22px auto;padding:0 16px}
+    .grid{display:grid;grid-template-columns:1fr;gap:18px}
+    .card{background:var(--card);padding:18px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
+    h2{margin:0 0 8px 0;font-size:1.1rem}
+    p{margin:0 0 10px 0;line-height:1.5}
+    ul{margin:6px 0 12px 18px}
+    label{display:block;margin:8px 0;font-weight:600}
+    input[type=text], input[type=number], input[type=tel], input[type=datetime-local], select, textarea, input[type=email], input[type=date]{width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;box-sizing:border-box}
+    textarea{min-height:88px}
+    .row{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+    button{background:var(--accent);color:white;border:none;padding:10px 14px;border-radius:8px;cursor:pointer}
+    button.secondary{background:#444}
+    .notice{background:#fff7f7;border-left:4px solid var(--accent);padding:10px;border-radius:6px}
+    table{width:100%;border-collapse:collapse;margin-top:12px}
+    th,td{padding:8px;border-bottom:1px solid #eee;text-align:left;font-size:0.95rem}
+    .small{font-size:0.9rem;color:#555}
+    @media (max-width:700px){.row{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Blood Donation — Save Lives</h1>
+    <p class="small">Simple single-page site with an integrated Donor / Receiver form. No server required — data is stored in your browser and can be downloaded as CSV.</p>
+  </header>
+
+  <main class="container">
+    <section class="grid">
+      <div class="card">
+        <h2>About</h2>
+        <p>This page helps register blood donors and requests (receivers) in one simple form. Use the buttons below the form to download all entries as CSV or clear stored entries. You can also enable email submission (mailto) by setting an admin email in the HTML file.</p>
+      </div>
+
+      <div class="card">
+        <h2>Who can donate?</h2>
+        <ul>
+          <li>Age between 18 and 60 (follow local rules).</li>
+          <li>Weight &gt;= 50 kg recommended.</li>
+          <li>No fever, active infection, or recent major surgery.</li>
+          <li>Pregnant or menstruating donors should wait until cleared.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>After donation — rest & food</h2>
+        <div class="notice">
+          <p class="small">Rest 10–20 minutes after donation. Drink 2–3 glasses of water or juice. Eat iron and protein-rich foods: eggs, meat, lentils, spinach, dried fruits. Avoid heavy exercise and excessive caffeine for 24 hours.</p>
+        </div>
+      </div>
+
+      <div class="card" id="formCard">
+        <h2>Donor / Receiver Form</h2>
+        <p class="small">Fill the form below. Choose whether you are a donor or need blood (receiver).</p>
+
+        <form id="bdForm">
+          <div class="row">
+            <div>
+              <label for="name">Full Name *</label>
+              <input id="name" name="name" type="text" required />
+            </div>
+            <div>
+              <label for="age">Age *</label>
+              <input id="age" name="age" type="number" min="16" max="120" required />
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label for="phone">Phone *</label>
+              <input id="phone" name="phone" type="tel" required />
+            </div>
+            <div>
+              <label for="city">City</label>
+              <input id="city" name="city" type="text" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label for="blood">Blood Group *</label>
+              <select id="blood" name="blood" required>
+                <option value="">-- Select --</option>
+                <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+                <option>O+</option><option>O-</option><option>AB+</option><option>AB-</option>
+              </select>
+            </div>
+            <div>
+              <label for="type">I want to *</label>
+              <select id="type" name="type" required>
+                <option value="">-- Select --</option>
+                <option value="Donate">Donate</option>
+                <option value="Receive">Receive</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label for="date">Available Date</label>
+              <input id="date" name="date" type="date" />
+            </div>
+            <div>
+              <label for="time">Available Time</label>
+              <input id="time" name="time" type="datetime-local" />
+            </div>
+          </div>
+
+          <label for="weight">Weight (kg)</label>
+          <input id="weight" name="weight" type="number" min="30" />
+
+          <label for="medical">Medical info / Medications (optional)</label>
+          <textarea id="medical" name="medical"></textarea>
+
+          <label for="hospital">Hospital or Location (if receiver)</label>
+          <input id="hospital" name="hospital" type="text" />
+
+          <label for="notes">Additional Notes</label>
+          <textarea id="notes" name="notes"></textarea>
+
+          <label><input type="checkbox" id="consent" required /> I consent to share this information for blood donation purposes.</label>
+
+          <div class="actions">
+            <button type="submit">Submit</button>
+            <button type="button" class="secondary" id="downloadCsv">Download CSV</button>
+            <button type="button" class="secondary" id="showList">Show Saved Entries</button>
+            <button type="button" class="secondary" id="clearStorage">Clear Entries</button>
+          </div>
+        </form>
+
+        <div id="message" style="margin-top:12px"></div>
+
+        <div id="entries" style="margin-top:12px;display:none">
+          <h3>Saved Entries</h3>
+          <div id="entriesTable"></div>
+        </div>
+
+      </div>
+
+      <div class="card">
+        <h2>How this works</h2>
+        <ol>
+          <li>Visitors fill the form — data is saved in your browser (Local Storage).</li>
+          <li>Click "Download CSV" to export all collected entries and share them with hospitals or volunteers.</li>
+          <li>If you want email submission, edit <code>ADMIN_EMAIL</code> in the HTML top script (instructions in comments).</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <h2>Publish / Host</h2>
+        <p>To publish the page online:</p>
+        <ul>
+          <li>Option A — Upload the HTML file to GitHub and enable GitHub Pages (free).</li>
+          <li>Option B — Put the HTML file on any static host (Netlify, Vercel, or simple webspace).</li>
+          <li>Or simply open the file on your computer and run it — it works offline, but data stays in that browser only.</li>
+        </ul>
+      </div>
+
+    </section>
+  </main>
+
+  <script>
+    // === CONFIG ===
+    // If you want the form to open an email (mailto) to an admin set ADMIN_EMAIL to an address.
+    // Leave empty string '' to disable mailto behavior.
+    const ADMIN_EMAIL = '';
+
+    // localStorage key
+    const KEY = 'blood_entries_v1';
+
+    function loadEntries(){
+      try{ return JSON.parse(localStorage.getItem(KEY) || '[]') }catch(e){return[]}
+    }
+    function saveEntries(arr){ localStorage.setItem(KEY, JSON.stringify(arr)) }
+
+    function showMessage(msg, ok=true){ const el=document.getElementById('message'); el.textContent=msg; el.style.color= ok? '#166534':'#9b1c1c' }
+
+    function entryToRow(e){ return `<tr><td>${escapeHtml(e.name)}</td><td>${escapeHtml(e.type)}</td><td>${escapeHtml(e.blood)}</td><td>${escapeHtml(e.phone)}</td><td>${escapeHtml(e.city)}</td><td class="small">${escapeHtml(e.date||'')}</td></tr>` }
+
+    function escapeHtml(s){ if(!s) return ''; return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;') }
+
+    function renderEntriesTable(){ const list=loadEntries(); if(list.length===0){ document.getElementById('entriesTable').innerHTML='<p class="small">No entries saved yet.</p>'; return }
+      let html='<table><thead><tr><th>Name</th><th>Type</th><th>Blood</th><th>Phone</th><th>City</th><th>Available</th></tr></thead><tbody>' + list.map(entryToRow).join('') + '</tbody></table>';
+      document.getElementById('entriesTable').innerHTML = html;
+    }
+
+    document.getElementById('bdForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      const form = e.target;
+      const data = {
+        name: form.name.value.trim(),
+        age: form.age.value,
+        phone: form.phone.value.trim(),
+        city: form.city.value.trim(),
+        blood: form.blood.value,
+        type: form.type.value,
+        date: form.date.value,
+        time: form.time.value,
+        weight: form.weight.value,
+        medical: form.medical.value.trim(),
+        hospital: form.hospital.value.trim(),
+        notes: form.notes.value.trim(),
+        ts: new Date().toISOString()
+      };
+      if(!data.name || !data.phone || !data.blood || !data.type){ showMessage('Please fill required fields.', false); return }
+
+      // Save locally
+      const arr = loadEntries(); arr.unshift(data); saveEntries(arr);
+      showMessage('Saved locally ✅');
+      form.reset();
+
+      // If ADMIN_EMAIL set, open mailto with content as fallback
+      if(ADMIN_EMAIL){
+        const subject = encodeURIComponent('Blood Form: '+data.type+' — '+data.blood+' — '+data.name);
+        const bodyParts = [];
+        for(const k in data){ bodyParts.push(k+': '+(data[k]||'')) }
+        const body = encodeURIComponent(bodyParts.join('\n'));
+        window.location.href = `mailto:${ADMIN_EMAIL}?subject=${subject}&body=${body}`;
+      }
+
+    });
+
+    document.getElementById('downloadCsv').addEventListener('click', function(){
+      const rows = loadEntries(); if(rows.length===0){ showMessage('No entries to download.', false); return }
+      const keys = ['ts','name','age','phone','city','blood','type','date','time','weight','medical','hospital','notes'];
+      const csv = [keys.join(',')].concat(rows.map(r => keys.map(k => '"'+(String(r[k]||'')).replace(/"/g,'""')+'"').join(','))).join('\n');
+      const blob = new Blob([csv], {type:'text/csv'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'blood_entries.csv'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+      showMessage('CSV downloaded ✅');
+    });
+
+    document.getElementById('showList').addEventListener('click', function(){
+      const el = document.getElementById('entries'); el.style.display = el.style.display === 'block' ? 'none' : 'block'; renderEntriesTable();
+    });
+
+    document.getElementById('clearStorage').addEventListener('click', function(){ if(!confirm('Clear all saved entries?')) return; localStorage.removeItem(KEY); renderEntriesTable(); showMessage('All entries cleared.'); });
+
+    // initial render
+    renderEntriesTable();
+  </script>
+</body>
+</html>
